@@ -1,12 +1,24 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'elementSelected' || request.action === 'autoclickStopped') {
-    // Forward the message to all active tabs, including the popup if it's open.
-    // This handles the case where the popup might not be open when the message is sent.
+  if (request.action === 'elementSelected') {
+    // Store the selected selector in storage
+    chrome.storage.sync.set({ selector: request.selector }, () => {
+      console.log('Selector saved to storage:', request.selector);
+    });
+    // Forward the message to the popup if it's open
     chrome.runtime.sendMessage(request, (response) => {
       if (chrome.runtime.lastError) {
-        // This error occurs if no receiving end exists (e.g., popup is closed).
-        // It's expected behavior if the popup isn't open, so we can ignore it.
-        console.log("Could not send message to popup (it might be closed):", chrome.runtime.lastError.message);
+        console.log("Could not send elementSelected message to popup (it might be closed):", chrome.runtime.lastError.message);
+      }
+    });
+  } else if (request.action === 'autoclickStopped') {
+    // Update isRunning status in storage
+    chrome.storage.sync.set({ isRunning: false }, () => {
+      console.log('Autoclick status set to stopped in storage.');
+    });
+    // Forward the message to the popup if it's open
+    chrome.runtime.sendMessage(request, (response) => {
+      if (chrome.runtime.lastError) {
+        console.log("Could not send autoclickStopped message to popup (it might be closed):", chrome.runtime.lastError.message);
       }
     });
   }

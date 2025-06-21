@@ -13,9 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentTabId = null;
 
   // Load saved settings
-  chrome.storage.sync.get(['selector', 'intervalSeconds', 'isRunning'], (data) => {
+chrome.storage.sync.get(['selector', 'intervalSeconds', 'isRunning'], (data) => {
     if (data.selector) {
       currentSelector.textContent = data.selector;
+      selectionStatus.textContent = `Selected: ${data.selector}`; // Update status on load
+    } else {
+      currentSelector.textContent = 'None';
+      selectionStatus.textContent = 'No element selected.';
     }
     secondsInput.value = data.intervalSeconds !== undefined ? data.intervalSeconds : 0;
     updateCurrentIntervalDisplay(data.intervalSeconds);
@@ -185,20 +189,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Listener for messages from background script (forwarded from content script)
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'elementSelected') {
       console.log('Message received in popup.js from background:', request);
       const selector = request.selector;
       currentSelector.textContent = selector;
       selectionStatus.textContent = `Selected: ${selector}`;
-      chrome.storage.sync.set({ selector: selector });
+      // No need to set selector in storage here, as background.js already handles it
       alert(`Element selected: ${selector}`);
-    } else if (request.action === 'autoclickStopped' && request.reason === 'elementNotFound') {
-      autoclickStatus.textContent = 'Stopped (Element Not Found)';
+    } else if (request.action === 'autoclickStopped') { // Removed && request.reason === 'elementNotFound'
+      autoclickStatus.textContent = 'Stopped'; // Simplified status
       runAutoclick.disabled = false;
       stopAutoclick.disabled = true;
-      selectionStatus.textContent = 'Autoclick stopped: Selected element not found on page.';
+      selectionStatus.textContent = request.reason ? `Autoclick stopped: ${request.reason}` : 'Autoclick stopped.'; // Display reason if available
       countdownDisplay.textContent = 'N/A'; // Reset countdown display
+      // No need to set isRunning in storage here, as background.js already handles it
     } else if (request.action === 'updateCountdown') {
       countdownDisplay.textContent = `${request.timeLeft} seconds`;
     }
