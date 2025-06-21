@@ -28,10 +28,16 @@ chrome.storage.sync.get(['selector', 'intervalSeconds', 'isRunning'], (data) => 
       autoclickStatus.textContent = 'Running';
       runAutoclick.disabled = true;
       stopAutoclick.disabled = false;
+      selectButton.disabled = true;
+      resetButton.disabled = true;
+      secondsInput.disabled = true;
     } else {
       autoclickStatus.textContent = 'Stopped';
       runAutoclick.disabled = false;
       stopAutoclick.disabled = true;
+      selectButton.disabled = false;
+      resetButton.disabled = false;
+      secondsInput.disabled = false;
     }
     countdownDisplay.textContent = 'N/A'; // Initialize countdown display
   });
@@ -83,6 +89,9 @@ chrome.storage.sync.get(['selector', 'intervalSeconds', 'isRunning'], (data) => 
         autoclickStatus.textContent = 'Stopped';
         runAutoclick.disabled = false;
         stopAutoclick.disabled = true;
+        selectButton.disabled = false;
+        resetButton.disabled = false;
+        secondsInput.disabled = false;
         chrome.scripting.executeScript({
           target: { tabId: currentTabId },
           files: ['src/content/autoclick.js'] // Inject the script containing stopAutoclick
@@ -126,6 +135,9 @@ chrome.storage.sync.get(['selector', 'intervalSeconds', 'isRunning'], (data) => 
       autoclickStatus.textContent = 'Running';
       runAutoclick.disabled = true;
       stopAutoclick.disabled = false;
+      selectButton.disabled = true;
+      resetButton.disabled = true;
+      secondsInput.disabled = true;
       selectionStatus.textContent = '';
 
       chrome.scripting.executeScript({
@@ -161,6 +173,9 @@ chrome.storage.sync.get(['selector', 'intervalSeconds', 'isRunning'], (data) => 
       autoclickStatus.textContent = 'Stopped';
       runAutoclick.disabled = false;
       stopAutoclick.disabled = true;
+      selectButton.disabled = false;
+      resetButton.disabled = false;
+      secondsInput.disabled = false;
       selectionStatus.textContent = '';
       countdownDisplay.textContent = 'N/A'; // Reset countdown display
 
@@ -197,13 +212,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       selectionStatus.textContent = `Selected: ${selector}`;
       // No need to set selector in storage here, as background.js already handles it
       alert(`Element selected: ${selector}`);
-    } else if (request.action === 'autoclickStopped') { // Removed && request.reason === 'elementNotFound'
-      autoclickStatus.textContent = 'Stopped'; // Simplified status
+    } else if (request.action === 'autoclickStopped') {
+      autoclickStatus.textContent = 'Stopped';
       runAutoclick.disabled = false;
       stopAutoclick.disabled = true;
-      selectionStatus.textContent = request.reason ? `Autoclick stopped: ${request.reason}` : 'Autoclick stopped.'; // Display reason if available
-      countdownDisplay.textContent = 'N/A'; // Reset countdown display
-      // No need to set isRunning in storage here, as background.js already handles it
+      selectButton.disabled = false;
+      resetButton.disabled = false;
+      secondsInput.disabled = false;
+      selectionStatus.textContent = request.reason ? `Autoclick stopped: ${request.reason}` : 'Autoclick stopped.';
+      countdownDisplay.textContent = 'N/A';
     } else if (request.action === 'updateCountdown') {
       countdownDisplay.textContent = `${request.timeLeft} seconds`;
     }
