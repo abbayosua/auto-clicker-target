@@ -1,30 +1,20 @@
-# <img src="assets/images/logo512.png" alt="Extension Logo" width="100" height="100" style="vertical-align: middle; margin-left: 10px;"> Fresh Chrome Extension boilerplate
+# <img src="assets/images/logo512.png" alt="Extension Logo" width="100" height="100" style="vertical-align: middle; margin-left: 10px;"> Auto-Clicker Target Chrome Extension
 
 ## Purpose
 
-This extension serves as a boilerplate for creating new extensions _(Manifest V3)_ for Chromium-based browsers, such as Google Chrome.
-
-It shows basic interactions between a popup, content scripts, and the active tab. It can be easily extended to add more complex functionality.
-
-## The biggest improvement in this version (3+)
-
-Now when the user clicks the browser's extension button a popup is shown instead of just logging a message to the console.
-
-<picture>
-  <img alt="fresh-chrome-extension-demo-image" src="https://github.com/user-attachments/assets/2a231a11-b60a-405b-835a-aa03d01d1988">
-</picture>
+This extension provides an auto-clicking functionality for Chromium-based browsers, such as Google Chrome. It allows users to select any clickable element on a webpage and set an interval for automatic clicks.
 
 ## What this extension does
 
 It provides the following functionality:
 
-1. When installed, it adds a button to the browser's top bar.
-
-2. Clicking the extension button opens a popup with a button labeled "Click this button to add an orange div to the page".
-
-3. When the button in the popup is clicked, it injects a script into the active tab that:
-   - Adds an orange div at the top of the page with the message "DOM modified!"
-   - Logs the message "Action executed from popup!" to the DevTools console (F12)
+1.  **Element Selection**: Users can easily select any button, link, or other clickable element on a webpage directly from the extension popup.
+2.  **Customizable Interval**: Set the auto-click interval in seconds, allowing for precise control over the clicking frequency.
+3.  **Start/Stop Control**: Intuitive buttons in the popup to start and stop the auto-clicker at any time.
+4.  **Real-time Status**: The popup displays the currently selected element, the set interval, a countdown to the next click, and the overall status of the auto-clicker (Running/Stopped).
+5.  **Persistence**: The selected element and interval settings are saved, so the auto-clicker can resume automatically when you revisit or refresh a page.
+6.  **Link Navigation**: If the selected element is a link, the extension will simulate navigation to the link's URL.
+7.  **Error Handling**: Automatically stops if the selected element is no longer found on the page.
 
 ## How to install
 

@@ -1,12 +1,12 @@
 {
-  "name": "Fresh Chrome Extension boilerplate",
-  "description": "Fully functional, useful bare minimum Google Chrome extension boilerplate [Manifest V3].",
-  "homepage_url": "https://github.com/llagerlof/fresh-chrome-extension",
-  "version": "3.1.0",
+  "name": "Auto-Clicker Target",
+  "description": "An auto-clicker Chrome extension that allows users to select an element and set an interval for automatic clicks.",
+  "homepage_url": "https://github.com/abbayosua/auto-clicker-target.git",
+  "version": "1.0.0",
   "manifest_version": 3,
   "background": {"service_worker": "src/background.js"},
   "action": {
-    "default_title": "Fresh Chrome Extension boilerplate 3.1.0",
+    "default_title": "Auto-Clicker Target",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
